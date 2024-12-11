@@ -1,0 +1,273 @@
+{
+    "pages": {
+        "configuration": {
+            "tabs": [
+                {
+                    "name": "account",
+                    "restHandlerModule": "observability_account_verification",
+                    "restHandlerClass": "observability_account_validator",
+                    "title": "Account",
+                    "table": {
+                        "actions": [
+                            "edit",
+                            "delete",
+                            "clone"
+                        ],
+                        "header": [
+                            {
+                                "label": "Name",
+                                "field": "name"
+                            }
+                        ]
+                    },
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the data input.",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Realm",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 5",
+                                    "minLength": 1,
+                                    "maxLength": 5
+                                }
+                            ],
+                            "field": "realm",
+                            "help": "The realm of your Observability stack (eg: au0, us2, eu0)",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Token",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 20 and 25",
+                                    "minLength": 20,
+                                    "maxLength": 25
+                                }
+                            ],
+                            "field": "token",
+                            "help": "The API Token from Observability (User token if ingesting Tokens)",
+                            "required": true,
+                            "encrypted": true
+                        }
+                    ]
+                },
+                {
+                    "type": "loggingTab"
+                }
+            ],
+            "title": "Configuration",
+            "description": "Set up your add-on"
+        },
+        "inputs": {
+            "services": [
+                {
+                    "name": "observability_object",
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the data input.",
+                            "required": true
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Observability Object Type",
+                            "field": "object_type",
+                            "options": {
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "alert",
+                                        "label": "Alert"
+                                    },
+                                    {
+                                        "value": "chart",
+                                        "label": "Chart"
+                                    },
+                                    {
+                                        "value": "dashboard",
+                                        "label": "Dashboard"
+                                    },
+                                    {
+                                        "value": "detector",
+                                        "label": "Detector"
+                                    },
+                                    {
+                                        "value": "synthetic",
+                                        "label": "Synthetic"
+                                    },
+                                    {
+                                        "value": "synthetic_detailed",
+                                        "label": "Detailed Synthetic"
+                                    },
+                                    {
+                                        "value": "token",
+                                        "label": "Token"
+                                    }
+                                ]
+                            },
+                            "help": "The type of object to be ingested",
+                            "required": true
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Account to use",
+                            "options": {
+                                "referenceName": "account"
+                            },
+                            "field": "account",
+                            "required": true
+                        },
+                        {
+                            "type": "interval",
+                            "label": "Interval",
+                            "defaultValue": "300",
+                            "field": "interval",
+                            "options": {
+                                "range": [
+                                    10,
+                                    86400
+                                ]
+                            },
+                            "help": "Time interval of the data input, in seconds.",
+                            "required": true
+                        },
+                        {
+                            "type": "index",
+                            "field": "index",
+                            "defaultValue": "observability_admin",
+                            "label": "Index"
+                        }
+                    ],
+                    "inputHelperModule": "observability_object_helper",
+                    "title": "observability_object"
+                }
+            ],
+            "title": "Inputs",
+            "description": "Manage your data inputs from Splunk Observability",
+            "subDescription": {
+                "text": "Alerts: Ingests all active alerts (limit of 10,000) \n Charts: blah \n Dashboards: blah \n Detectors: blhblah \n Synthetics: blah \n Detailed Synthetics: blahhhh \n Tokens: Blah!"
+            },
+            "table": {
+                "actions": [
+                    "edit",
+                    "delete",
+                    "clone"
+                ],
+                "header": [
+                    {
+                        "label": "Name",
+                        "field": "name"
+                    },
+                    {
+                        "label": "Interval",
+                        "field": "interval"
+                    },
+                    {
+                        "label": "Index",
+                        "field": "index"
+                    },
+                    {
+                        "label": "Object Type",
+                        "field": "object_type"
+                    },
+                    {
+                        "label": "Status",
+                        "field": "disabled"
+                    }
+                ],
+                "moreInfo": [
+                    {
+                        "label": "Name",
+                        "field": "name"
+                    },
+                    {
+                        "label": "Interval",
+                        "field": "interval"
+                    },
+                    {
+                        "label": "Index",
+                        "field": "index"
+                    },
+                    {
+                        "label": "Object Type",
+                        "field": "object_type"
+                    },
+                    {
+                        "label": "Status",
+                        "field": "disabled",
+                        "mapping": {
+                            "true": "Inactive",
+                            "false": "Active"
+                        }
+                    }
+                ]
+            }
+        },
+        "dashboard": {
+            "panels": [
+                {
+                    "name": "default"
+                }
+            ]
+        }
+    },
+    "meta": {
+        "name": "observability_admin_TA",
+        "restRoot": "observability_admin_TA",
+        "version": "1.2.0",
+        "displayName": "O11y (Splunk Observability) TA",
+        "schemaVersion": "0.0.9",
+        "supportedThemes": [
+            "light",
+            "dark"
+        ],
+        "_uccVersion": "5.54.0"
+    }
+}
