@@ -1,0 +1,77 @@
+<form version="1.1">
+  <label>Tokens</label>
+  <description>A table of all the API/INGEST/RUM token's in your Splunk Observability platform, and their corresponding expiry dates</description>
+  <init>
+    <unset token="name"></unset>
+  </init>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row rejects="$name$">
+    <panel>
+      <html>
+      <p>Click on a row to expand on token</p>
+    </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Tokens by Expiry</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_token_sourcetype`
+|stats latest(expiry) as expiry latest(id) as id latest(authScopes{}) as authScopes by name
+|eval expiry_seconds = expiry/1000
+|eval expiry_formatted = strftime(expiry_seconds,"%Y-%m-%d %H:%M:%S.%6N %Z")
+|table name id authScopes expiry_formatted
+|rename expiry_formatted as expiry
+|sort 0 -expiry</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <set token="id">$row.id$</set>
+          <set token="name">$row.name$</set>
+          <set token="authScopes">$row.authScopes$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row depends="$name$">
+    <panel>
+      <html>
+      <h1>$name$ - $id$ - $authScopes$ </h1>
+                                              <a href="https://dev.splunk.com/observability/reference/api/org_tokens/latest#endpoint-retrieve-tokens-using-query" class="btn-pill">
+                    View API Documentation🔗
+                </a>
+    </html>
+    </panel>
+  </row>
+  <row depends="$name$">
+    <panel>
+      <table>
+        <title>Token Details</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_token_sourcetype` id=$id|s$
+|fields - host, index, linecount, punct, source, sourcetype, splunk_server, timestamp
+|stats latest(*) as * by id
+|transpose column_name="fields"
+|rename "row 1" as values
+|sort +fields</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

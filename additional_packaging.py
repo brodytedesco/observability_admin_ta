@@ -1,29 +1,111 @@
-from os.path import sep, exists, dirname, realpath, join
-from os import makedirs
+from os.path import dirname, realpath, join, exists, isfile
+from os import makedirs, listdir
 from shutil import copy2
 
 def additional_packaging(ta_name: str):
     """
-    Copy props.conf from configurations directory into output/{ta_name}/default.
+    Copy all files from the configurations directory into output/{ta_name}/default.
     """
-    # Ensure ta_name is provided
     if not ta_name:
         raise ValueError("ta_name must be provided to additional_packaging.")
 
-    # Define the source and target paths
-    base_dir = dirname(realpath(__file__))
-    source_file = join(base_dir, "configurations", "props.conf")
-    target_dir = join(base_dir, "output", ta_name, "default")
+    try:
+        base_dir = dirname(realpath(__file__))
+        source_dir = join(base_dir, "configurations")
+        target_dir = join(base_dir, "output", ta_name, "default")
 
-    # Make sure the target directory exists
-    if not exists(target_dir):
-        makedirs(target_dir)
+        # Iterate over all files in configurations directory
+        for filename in listdir(source_dir):
+            source_file = join(source_dir, filename)
+            
+            # Only copy regular files, not directories
+            if isfile(source_file):
+                copy2(source_file, target_dir)
+    except Exception as e:
+        raise IOError(f"Failed to copy {source_file} to {target_dir}: {e}") from e
 
-    # Copy the file
-    if exists(source_file):
-        copy2(source_file, target_dir)
-    else:
-        raise FileNotFoundError(f"Source file does not exist: {source_file}")
+    try:
+        base_dir = dirname(realpath(__file__))
+        source_dir = join(base_dir, "dashboards")
+        target_dir = join(base_dir, "output", ta_name, "default", "data","ui", "views")
+
+        # Ensure the target directory exists
+        if not exists(target_dir):
+            makedirs(target_dir)
+
+        # Iterate over all files in the dashboards directory
+        for filename in listdir(source_dir):
+            source_file = join(source_dir, filename)
+
+            # Only copy regular files, not directories
+            if isfile(source_file):
+                copy2(source_file, target_dir)
+    except Exception as e:
+    # If there's an error copying, raise a new exception with the original error message
+        raise IOError(f"Failed to copy {source_file} to {target_dir}: {e}") from e
+    
+    try:
+        base_dir = dirname(realpath(__file__))
+        source_dir = join(base_dir, "appserver")
+        target_dir = join(base_dir, "output", ta_name, "appserver", "static")
+
+        # Ensure the target directory exists
+        if not exists(target_dir):
+            makedirs(target_dir)
+
+        # Iterate over all files in the dashboards directory
+        for filename in listdir(source_dir):
+            source_file = join(source_dir, filename)
+
+            # Only copy regular files, not directories
+            if isfile(source_file):
+                copy2(source_file, target_dir)
+    except Exception as e:
+    # If there's an error copying, raise a new exception with the original error message
+        raise IOError(f"Failed to copy {source_file} to {target_dir}: {e}") from e
+    
+    try:
+        base_dir = dirname(realpath(__file__))
+        source_dir = join(base_dir, "navigator")
+        target_dir = join(base_dir, "output", ta_name, "default", "data","ui", "nav")
+
+        # Ensure the target directory exists
+        if not exists(target_dir):
+            makedirs(target_dir)
+
+        # Iterate over all files in the dashboards directory
+        for filename in listdir(source_dir):
+            source_file = join(source_dir, filename)
+
+            # Only copy regular files, not directories
+            if isfile(source_file):
+                copy2(source_file, target_dir)
+
+    except Exception as e:
+    # If there's an error copying, raise a new exception with the original error message
+        raise IOError(f"Failed to copy {source_file} to {target_dir}: {e}") from e
+    
+    try:
+        base_dir = dirname(realpath(__file__))
+        source_dir = join(base_dir, "static")
+        target_dir = join(base_dir, "output", ta_name, "static")
+
+        # Ensure the target directory exists
+        if not exists(target_dir):
+            makedirs(target_dir)
+
+        # Iterate over all files in the dashboards directory
+        for filename in listdir(source_dir):
+            source_file = join(source_dir, filename)
+
+            # Only copy regular files, not directories
+            if isfile(source_file):
+                copy2(source_file, target_dir)
+    except Exception as e:
+    # If there's an error copying, raise a new exception with the original error message
+        raise IOError(f"Failed to copy {source_file} to {target_dir}: {e}") from e
+        
+
 
 def cleanup_output_files(output_path: str, ta_name: str) -> None:
     """

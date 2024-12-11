@@ -190,9 +190,9 @@
                 }
             ],
             "title": "Inputs",
-            "description": "Manage your data inputs from Splunk Observability",
+            "description": "The Splunk Observability API has a return limit of 10,000 for all objects, therefore if you have more then 10,000 of a object, some data will not be included (charts are a main culprit for this)",
             "subDescription": {
-                "text": "Alerts: Ingests all active alerts (limit of 10,000) \n Charts: blah \n Dashboards: blah \n Detectors: blhblah \n Synthetics: blah \n Detailed Synthetics: blahhhh \n Tokens: Blah!"
+                "text": "Alerts: Ingests all active alerts\n Charts: Ingests all charts \n Dashboards: Ingests all Dashboards \n Detectors: Ingest all Detectors \n Synthetics: Ingest all Synthetics \n Detailed Synthetics: Ingests all Synthetics, with a high level of detail. WARNING: This takes a long time, as detailed information is queried one by one. \n Tokens: Ingests all Tokens. You must use a account with a 'User API Token', refer to set-up"
             },
             "table": {
                 "actions": [
