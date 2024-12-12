@@ -1,0 +1,42 @@
+name: Build and Push Splunk Add-On
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python and Install UCC Framework
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install UCC Framework
+        run: |
+          python -m pip install --upgrade pip
+          pip install splunk-add-on-ucc-framework
+
+      # Step 3: Build the Add-On
+      - name: Build Add-On
+        run: |
+          ucc-gen build -v --ta-version 1.2.0
+
+      # Step 4: Push Built Files to 'build-output' Branch
+      - name: Push Built Files
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git fetch
+          git checkout -b build-output
+          git add output/
+          git commit -m "Add built files from workflow"
+          git push origin build-output --force
