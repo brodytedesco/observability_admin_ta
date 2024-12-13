@@ -36,7 +36,7 @@ jobs:
       # Step 4: Package the Add-On
       - name: Package the Add-On
         run: |
-          ucc-gen package --path /home/runner/work/observability_admin_ta/observability_admin_ta/output/observability_admin_ta
+          ucc-gen package --path /home/runner/work/observability_admin_ta/observability_admin_ta/output/observability_admin_TA
       # Step 5: Push Built Files to 'build-output' Branch
       - name: Push Built Files
         run: |
