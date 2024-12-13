@@ -1,0 +1,262 @@
+<form version="1.1" theme="light">
+  <label>Observability TA Health</label>
+  <description>This page shows the performance and health of the different scripts hitting different endpoints within your observability stack</description>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <chart>
+        <title>Alert Ingest Time Taken</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'alert ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart avg(time_taken) as "average time taken (ms)"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Alert Ingest Count</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'alert ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart  avg(ingested) as "average ingested objects"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Detector Ingest Time Taken</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'detector ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart avg(time_taken) as "average time taken (ms)"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Detector Ingest Count</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'detector ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart  avg(ingested) as "average ingested objects"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Synthetic Ingest Time Taken</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'synthetic ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart avg(time_taken) as "average time taken (ms)"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Synthetic Ingest Count</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'synthetic ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart  avg(ingested) as "average ingested objects"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Dashboard Ingest Time Taken</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'dashboard ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart avg(time_taken) as "average time taken (ms)"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Dashboard Ingest Count</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'dashboard ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart avg(ingested) as "average ingested objects"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Chart Ingest Time Taken</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'chart ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart avg(time_taken) as "average time taken (ms)"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Chart Ingest Count</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'chart ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart  avg(ingested) as "average ingested objects"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+    <row>
+    <panel>
+      <chart>
+        <title>Token Ingest Time Taken</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'token ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart avg(time_taken) as "average time taken (ms)"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Token Ingest Count</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'token ingest finished'"
+|rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
+|timechart  avg(ingested) as "average ingested objects"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+                        <option name="charting.legend.placement">none</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Error Messages</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor sourcetype=splunkd log_level=ERROR
+|table _time _raw</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>Info Messages</title>
+        <search>
+          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO
+|table _time _raw</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

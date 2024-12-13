@@ -1,0 +1,31 @@
+<dashboard version="1.1" theme="light">
+  <label>Detector Creation</label>
+  <row>
+    <panel>
+      <html>
+      <p>Creating a detector can be done 3 ways: UI, API or Terraform. For most upto date information:</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <ul>
+  <li>
+            <a>https://docs.splunk.com/observability/en/alerts-detectors-notifications/alerts-detectors-notifications.html</a>
+          </li>
+  <li>
+            <a>https://dev.splunk.com/observability/reference/api/detectors/latest</a>
+          </li>
+  <li>
+            <a>https://registry.terraform.io/providers/splunk-terraform/signalfx/latest/docs/resources/detector</a>
+          </li>
+</ul>
+
+     
+       
+      </html>
+    </panel>
+  </row>
+
+</dashboard>

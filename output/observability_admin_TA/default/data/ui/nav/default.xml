@@ -1,0 +1,26 @@
+<nav search_view="search">
+   <view name="observability_getting_started" default='true' />
+<collection label="Setup">
+    <view name="configuration"></view>
+    <view name="inputs"/>
+    <a href="/manager/observability_admin_TA/data/macros">Macros</a>
+    <view name="observability_realm_setup"/>
+</collection>
+  <view name="observability_active_alerts"/>
+  <collection label="Detectors">
+  <view name="observability_detectors"/>
+    <view name="observability_detector_detailed"/>
+    <view name="observability_detector_create"/>
+  </collection>
+    <collection label="Synthetics">
+  <view name="observability_synthetics"/>
+    <view name="observability_synthetic_detailed"/>
+    <view name="observability_synthetic_create"/>
+  </collection>
+	<collection label="Health">
+     <view name="observability_platform_health"/>
+  <view name="observability_health"/>
+  </collection>
+
+  <view name="dashboards" />
+</nav>

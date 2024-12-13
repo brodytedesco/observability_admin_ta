@@ -1,0 +1,175 @@
+<form version="1.1" theme="dark" script="observability_detector.js">
+  <label>Detector Detailed</label>
+  <description>A dashboard to list all details of a detector retrieved via the API: https://dev.splunk.com/observability/reference/api/detectors/latest#endpoint-retrieve-detectors-query</description>
+  <init>
+    <unset token="hide"></unset>
+    <set token="show_table"></set>
+    <set token="json">init</set>
+    <set token="id">init</set>
+    <set token="json_pretty">init</set>
+  </init>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="dropdown" token="detectorName" searchWhenChanged="true">
+      <label>Detector Name</label>
+      <default>Enter Detector Name</default>
+      <initialValue>Enter Detector Name</initialValue>
+      <fieldForLabel>name</fieldForLabel>
+      <fieldForValue>name</fieldForValue>
+      <search>
+        <query>`observability_admin_index` `observability_admin_detector_sourcetype`   |stats latest(name) as name by id</query>
+        <earliest>-7d@d</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+                        <a href="#" class="btn-pill" data-set-token="show_table" data-value="show" data-token-json="{&quot;show_modify&quot;: null, &quot;show_delete&quot;: null}">
+                    View Detector Details🔎
+                </a>
+                                        <a href="#" class="btn-pill" data-set-token="show_modify" data-value="show" data-token-json="{&quot;show_table&quot;: null, &quot;show_delete&quot;: null}">
+                    Modify Via API⚙️
+                </a>
+                                        <a href="#" class="btn-pill" data-set-token="show_delete" data-value="show" data-token-json="{&quot;show_table&quot;: null, &quot;show_modify&quot;: null}">
+                    Delete Via API❌    
+                    </a>
+                                        <a href="observability_detector_create" class="btn-pill">
+                    Create Via API✔️
+                </a>
+                                        <a id="link_to_object" href="https://app.au0.signalfx.com/#/detector/v2/$id$/edit" class="btn-pill">
+                    View Detector on O11y🔗
+                </a>
+
+      </html>
+    </panel>
+  </row>
+  <row depends="$show_table$">
+    <panel>
+      <table>
+        <title>details</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_detector_sourcetype`    name=$detectorName|s$
+|fields - host, index, linecount, punct, source, sourcetype, splunk_server, timestamp
+|stats latest(*) as * by name
+|transpose column_name="fields"
+|rename "row 1" as values
+|sort +fields</query>
+          <earliest>-7d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$show_modify$">
+    <panel>
+      <html>
+        <p>To modify via the API we send a PUT request to the detector endpoint with the relevant ID: https://api.{REALM}.signalfx.com/v2/detector/$id$ </p>
+        <a href="https://dev.splunk.com/observability/reference/api/detectors/latest#endpoint-retrieve-detectors-query">Reference for detectors</a>
+      </html>
+    </panel>
+  </row>
+  <row depends="$show_hidden$">
+    <panel>
+      <table>
+        <title>JSON</title>
+        <search id="json_loader">
+          <query>`observability_admin_index` `observability_admin_detector_sourcetype`    name=$detectorName|s$
+|stats latest(_raw) as json latest(id) as id</query>
+          <earliest>-7d@d</earliest>
+          <latest>now</latest>
+          <done>
+            <set token="json">$result.json$</set>
+            <set token="id">$result.id$</set>
+          </done>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$show_modify$">
+    <panel>
+      <html>
+      <h1>Python Example</h1>
+      <container>
+<pre>
+            <code>import json
+import requests
+
+#Credentials
+<p id="realm_edit">REALM = ""</p>TOKEN = ""
+# API endpoints
+BASE_URL = f"https://api.{REALM}.signalfx.com"
+ENDPOINT_URL = f"{BASE_URL}/v2/detector/$id$"
+
+# Request headers
+headers = {
+    "Content-Type": "application/json",
+    "X-SF-TOKEN": TOKEN,
+}
+
+#JSON (modify this to make changes)
+detector_json= $json_pretty$
+
+# Convert the request body to JSON
+request_body_json = json.dumps(detector_json)
+
+# Make the API request
+response = requests.put(ENDPOINT_URL, headers=headers, data=request_body_json)
+
+# Print the response
+print(f"Status Code: {response.status_code}")
+print("Response:")
+print(response.json())
+</code>
+          </pre>
+      </container>
+    </html>
+    </panel>
+  </row>
+  <row depends="$show_delete$">
+    <panel>
+      <html>
+        <p>To delete via the API we send a DELETE request to the detector endpoint with the relevant ID: https://api.{REALM}.signalfx.com/v2/detector/$id$</p>
+        <a>https://dev.splunk.com/observability/reference/api/detectors/latest#endpoint-retrieve-detectors-query</a>
+      </html>
+    </panel>
+  </row>
+  <row depends="$show_delete$">
+    <panel>
+      <html>
+      <h1>Python Example</h1>
+      <container>
+<pre>
+            <code>import requests
+
+#Credentials
+<p id="realm_delete">REALM = ""</p>TOKEN = ""
+# API endpoints
+BASE_URL = f"https://api.{REALM}.signalfx.com"
+ENDPOINT_URL = f"{BASE_URL}/v2/detector/$id$"
+
+# Request headers
+headers = {
+    "Content-Type": "application/json",
+    "X-SF-TOKEN": TOKEN,
+}
+
+# Make the API request
+response = requests.delete(ENDPOINT_URL, headers=headers)
+
+# Print the response
+print(f"Status Code: {response.status_code}")
+</code>
+          </pre>
+      </container>
+    </html>
+    </panel>
+  </row>
+
+</form>
