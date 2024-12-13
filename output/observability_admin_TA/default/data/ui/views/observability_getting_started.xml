@@ -1,0 +1,89 @@
+<dashboard version="1.1" theme="light">
+  <label>Getting Started</label>
+  <description>This page will instruct you how to set-up the TA and use the data it generates</description>
+  <row>
+    <panel>
+      <html>
+      <h1>Introduction</h1>
+      <p>This TA Intends to ingest data from a Splunk Observability stack into Splunk Core (Be that enterprise or cloud) </p>
+      <p>It currently uses the following endpoints to ingest data:</p>
+      <a href="https://dev.splunk.com/observability/reference/api/incidents/latest#endpoint-retrieve-incidents">Alerts</a>
+      <a href="https://dev.splunk.com/observability/reference/api/charts/latest#endpoint-get-charts-using-query">Charts</a>
+      <a href="https://dev.splunk.com/observability/reference/api/dashboards/latest#endpoint-retrieve-dashboards-using-query">  Dashboards</a>
+      <a href="https://dev.splunk.com/observability/reference/api/detectors/latest#endpoint-retrieve-detectors-query">  Detectors</a>
+      <a href="https://dev.splunk.com/observability/reference/api/synthetics_tests/latest#endpoint-gettests">  Synthetics</a>
+      <a href="https://dev.splunk.com/observability/reference/api/org_tokens/latest#endpoint-retrieve-tokens-using-query"> Tokens</a>
+    </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+      <h1>Step 1: Token and Realm for data ingest</h1>
+      <p>To set up this TA, it is necessary to retrieve the realm of your Splunk Observability stack (this is found in the URL of the stack)</p>
+      <p>eg: https://app.{REALM}.signalfx.com Where REALM is the realm you will need to enter in the Setup Page</p>
+      <br/>
+      <p>To create the Token navigate to your stack -&gt; settings -&gt; access tokens</p>
+      <p>In the bottom left corner of the Access Tokens page, click "New Token"</p>
+      <p>Create a API token, the name and read permissions will have no effect on the TA</p>
+      <p>"show" the token, and enter it into the <a href="/app/observability_admin_TA/inputs">data inputs</a> for each input.</p>
+      <p>For the <b>Tokens</b> input, a "User API Access Token" with Admin permissions must be used.</p>
+      <p>this can be found on your profile page, in the top right corner of the page.</p>
+        <p>There is currently 6 types of input (Alerts, Charts, Dashboards, Detectors Synthetics, and Tokens)</p>
+    </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+      <h1>Step 1.5: Setup Realm for dashboard interactivity</h1>
+      <p>This TA uses your realm to power some elements of dashboards, this is set <a href="observability_realm_setup">here</a></p>
+
+    </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+      <h1>Step 2: Setting up index and macro</h1>
+      <p>This app and it's visualizations use the macro `observability_admin_index` for the index, and `obersevibility_admin_{type}_sourcetype`</p>
+      <p>for the sourcetypes of each <b>type</b> of object to power it's searches.</p>
+      <p> The index macro is expecting a index named: observability_admin. So for the most basic configuration</p>
+      <p>create a index called: observability_admin, and make sure when setting up inputs, the data is being ingested to this index</p>
+      <br/>
+      <p>If the index needs to named differently extra steps need to be taken. After creating the index</p>
+      <p>the `observability_admin_index` macro will need to be modified, so that the differently named index</p>
+      <p>replaces "observability_admin" in the search command. this can be done <a href="/manager/observability_admin_TA/data/macros">here</a></p>
+    </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+      <h1>Step 3: Use the data!</h1>
+      <p>This TA's primary goal is to bring configuration and admin-related data into a Splunk platform, so now you've done this, go discover your data!</p>
+      <p>Some useful dashboards can be found throughout this app.</p>
+    </html>
+    </panel>
+  </row>
+    <row>
+    <panel>
+      <html>
+      <h1>Bonus Step: Install the Splunk Infrastructure Monitoring Add-on</h1>
+      <p>One of the Health dashboards utilizes this add-on, additionally it's useful for bringing O11y data into the Splunk platform.</p>
+      <p> Download <a href="https://splunkbase.splunk.com/app/5247">Splunk Infrastructure Monitoring Add-on</a></p>
+ 
+    </html>
+    </panel>
+  </row>
+      <row>
+    <panel>
+      <html>
+      <h1>Support</h1>
+      <p>Feel Free to contact me at: brody.dom.tedesco@gmail.com or on the Splunk usergroup Slack: Brody Tedesco</p>
+
+ 
+    </html>
+    </panel>
+  </row>
+</dashboard>

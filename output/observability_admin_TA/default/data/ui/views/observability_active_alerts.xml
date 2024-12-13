@@ -1,0 +1,73 @@
+<form version="1.1">
+  <label>Active Alerts</label>
+  <init>
+    <unset token="alert"></unset>
+  </init>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row rejects="$alert$">
+    <panel>
+      <html>
+      <p>Click on a row to expand on alert</p>
+    </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Active Alerts</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_alert_sourcetype`
+|stats latest(active) as active latest(detectorName) as detectorName latest(detectLabel) as detectLabel latest(severity) as severity by incidentId</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">cell</option>
+        <drilldown>
+          <set token="alert">$row.incidentId$</set>
+          <set token="detectorname">$row.detectorName$</set>
+          <set token="detectorlabel">$row.detectLabel$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row depends="$alert$">
+    <panel>
+      <html>
+      <h1>$alert$ - $detectorname$ - $detectorlabel$</h1>
+                              <a href="/app/observability_admin_TA/observability_detector_detailed?form.detectorName=$detectorname$" class="btn-pill">
+                    View Detector Details🔎
+                </a>
+                                              <a href="https://dev.splunk.com/observability/reference/api/incidents/latest#endpoint-retrieve-incidents" class="btn-pill">
+                    View API Documentation🔗
+                </a>
+    </html>
+    </panel>
+  </row>
+  <row depends="$alert$">
+    <panel>
+      <table>
+        <title>Alert Details</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_alert_sourcetype` incidentId=$alert|s$
+|fields - host, index, linecount, punct, source, sourcetype, splunk_server, timestamp
+|stats latest(*) as * by incidentId
+|transpose column_name="fields"
+|rename "row 1" as values
+|sort +fields</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
