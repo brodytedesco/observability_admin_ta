@@ -33,7 +33,11 @@ jobs:
         run: |
           ucc-gen build -v --ta-version 1.2.0
 
-      # Step 4: Push Built Files to 'build-output' Branch
+      # Step 4: Package the Add-On
+      - name: Package the Add-On
+        run: |
+          ucc-gen package --path /output/observability_admin_TA
+      # Step 5: Push Built Files to 'build-output' Branch
       - name: Push Built Files
         run: |
           git config user.name "GitHub Actions"
@@ -41,5 +45,6 @@ jobs:
           git fetch
           git checkout -b build-output
           git add -f output
+          git add -f observability_admin_TA-1.2.0.tar.gz
           git commit -m "Add built files from workflow"
           git push origin build-output --force
