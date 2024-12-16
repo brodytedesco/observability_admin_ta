@@ -26,19 +26,10 @@
       <p>To create the Token navigate to your stack -&gt; settings -&gt; access tokens</p>
       <p>In the bottom left corner of the Access Tokens page, click "New Token"</p>
       <p>Create a API token, the name and read permissions will have no effect on the TA</p>
-      <p>"show" the token, and enter it into the <a href="/app/observability_admin_TA/inputs">data inputs</a> for each input.</p>
+      <p>"show" the token, and enter it into the <a href="/app/observability_admin_TA/configuration">configuration</a> for your account.</p>
       <p>For the <b>Tokens</b> input, a "User API Access Token" with Admin permissions must be used.</p>
-      <p>this can be found on your profile page, in the top right corner of the page.</p>
-        <p>There is currently 6 types of input (Alerts, Charts, Dashboards, Detectors Synthetics, and Tokens)</p>
-    </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <html>
-      <h1>Step 1.5: Setup Realm for dashboard interactivity</h1>
-      <p>This TA uses your realm to power some elements of dashboards, this is set <a href="observability_realm_setup">here</a></p>
-
+      <p>this can be found on your profile page, in the top right corner of the page. You can create a seperate account in <a href="/app/observability_admin_TA/configuration">configuration</a> for using this token</p>
+        <p>There is currently 7 types of input (Alerts, Charts, Dashboards, Detectors, Synthetics, Synthetics (detailed) and Tokens)</p>
     </html>
     </panel>
   </row>

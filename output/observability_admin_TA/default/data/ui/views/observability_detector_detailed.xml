@@ -16,7 +16,7 @@
       <fieldForLabel>name</fieldForLabel>
       <fieldForValue>name</fieldForValue>
       <search>
-        <query>`observability_admin_index` `observability_admin_detector_sourcetype`   |stats latest(name) as name by id</query>
+        <query>`observability_admin_index` `observability_admin_detector_sourcetype`   |stats latest(name) as name by id |dedup name</query>
         <earliest>-7d@d</earliest>
         <latest>now</latest>
       </search>

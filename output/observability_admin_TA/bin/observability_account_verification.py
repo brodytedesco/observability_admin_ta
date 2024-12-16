@@ -16,8 +16,9 @@ def _validate_token_realm(token: str, realm: str):
         response = requests.get(endpoint, headers=headers, params=params)
     except:
         raise RestError(400, "Realm was not recognized")
-    if not 200 <= response.status_code < 300:
-        raise RestError(400, "Account details are incorrect, could not successfully authenticate")
+    
+    if not (200 <= response.status_code < 300):
+        raise RestError(400, "Account details are incorrect, could not successfully authenticate with the Observability API, re-check your Token and Realm")
 
 
 class observability_account_validator(AdminExternalHandler):
