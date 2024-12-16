@@ -1,6 +1,6 @@
 <form version="1.1" theme="light">
   <label>Observability TA Health</label>
-  <description>This page shows the performance and health of the different scripts hitting different endpoints within your observability stack</description>
+  <description>This page shows the performance and health of the different data inputs attempting to retrieve data from your observability stack</description>
   <fieldset submitButton="false">
     <input type="time" token="field1">
       <label></label>
@@ -15,13 +15,12 @@
       <chart>
         <title>Alert Ingest Time Taken</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'alert ingest finished'"
+          <query>index=_internal time_taken alert sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart avg(time_taken) as "average time taken (ms)"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -33,13 +32,13 @@
       <chart>
         <title>Alert Ingest Count</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'alert ingest finished'"
+          <query>index=_internal time_taken alert sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart  avg(ingested) as "average ingested objects"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -52,13 +51,12 @@
       <chart>
         <title>Detector Ingest Time Taken</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'detector ingest finished'"
+          <query>index=_internal time_taken detector sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart avg(time_taken) as "average time taken (ms)"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -70,13 +68,13 @@
       <chart>
         <title>Detector Ingest Count</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'detector ingest finished'"
+          <query>index=_internal time_taken detector sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart  avg(ingested) as "average ingested objects"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -89,13 +87,13 @@
       <chart>
         <title>Synthetic Ingest Time Taken</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'synthetic ingest finished'"
+          <query>index=_internal time_taken synthetic sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart avg(time_taken) as "average time taken (ms)"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -106,13 +104,13 @@
       <chart>
         <title>Synthetic Ingest Count</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'synthetic ingest finished'"
+          <query>index=_internal time_taken synthetic sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart  avg(ingested) as "average ingested objects"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -125,13 +123,13 @@
       <chart>
         <title>Dashboard Ingest Time Taken</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'dashboard ingest finished'"
+          <query>index=_internal time_taken dashboard sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart avg(time_taken) as "average time taken (ms)"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -142,13 +140,13 @@
       <chart>
         <title>Dashboard Ingest Count</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'dashboard ingest finished'"
+          <query>index=_internal time_taken dashboard sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart avg(ingested) as "average ingested objects"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -161,13 +159,13 @@
       <chart>
         <title>Chart Ingest Time Taken</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'chart ingest finished'"
+          <query>index=_internal time_taken chart sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart avg(time_taken) as "average time taken (ms)"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.chart.nullValueMode">gaps</option>
@@ -179,13 +177,13 @@
       <chart>
         <title>Chart Ingest Count</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'chart ingest finished'"
+          <query>index=_internal time_taken chart sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart  avg(ingested) as "average ingested objects"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.chart.nullValueMode">connect</option>
@@ -194,18 +192,17 @@
       </chart>
     </panel>
   </row>
-    <row>
+  <row>
     <panel>
       <chart>
         <title>Token Ingest Time Taken</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'token ingest finished'"
+          <query>index=_internal time_taken token sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart avg(time_taken) as "average time taken (ms)"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -217,13 +214,13 @@
       <chart>
         <title>Token Ingest Count</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO message="'token ingest finished'"
+          <query>index=_internal time_taken token sourcetype="observability_admin_ta_*" time_taken
 |rex field=time_taken "(?&lt;time_taken_ms&gt;\d+)ms"
 |timechart  avg(ingested) as "average ingested objects"</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
         </search>
-                        <option name="charting.legend.placement">none</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.axisTitleX.text">Time</option>
         <option name="charting.chart">column</option>
         <option name="charting.drilldown">none</option>
@@ -236,7 +233,7 @@
       <table>
         <title>Error Messages</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor sourcetype=splunkd log_level=ERROR
+          <query>index=_internal time_taken sourcetype="observability_admin_ta_*" ERROR
 |table _time _raw</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>
@@ -249,7 +246,7 @@
       <table>
         <title>Info Messages</title>
         <search>
-          <query>index=_* *observability_api* sourcetype=splunkd component=ExecProcessor log_level=INFO
+          <query>index=_internal time_taken sourcetype="observability_admin_ta_*" INFO
 |table _time _raw</query>
           <earliest>$field1.earliest$</earliest>
           <latest>$field1.latest$</latest>

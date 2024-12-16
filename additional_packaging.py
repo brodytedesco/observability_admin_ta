@@ -46,26 +46,6 @@ def additional_packaging(ta_name: str):
     
     try:
         base_dir = dirname(realpath(__file__))
-        source_dir = join(base_dir, "appserver")
-        target_dir = join(base_dir, "output", ta_name, "appserver", "static")
-
-        # Ensure the target directory exists
-        if not exists(target_dir):
-            makedirs(target_dir)
-
-        # Iterate over all files in the dashboards directory
-        for filename in listdir(source_dir):
-            source_file = join(source_dir, filename)
-
-            # Only copy regular files, not directories
-            if isfile(source_file):
-                copy2(source_file, target_dir)
-    except Exception as e:
-    # If there's an error copying, raise a new exception with the original error message
-        raise IOError(f"Failed to copy {source_file} to {target_dir}: {e}") from e
-    
-    try:
-        base_dir = dirname(realpath(__file__))
         source_dir = join(base_dir, "navigator")
         target_dir = join(base_dir, "output", ta_name, "default", "data","ui", "nav")
 
@@ -104,6 +84,7 @@ def additional_packaging(ta_name: str):
     except Exception as e:
     # If there's an error copying, raise a new exception with the original error message
         raise IOError(f"Failed to copy {source_file} to {target_dir}: {e}") from e
+    
         
 
 
