@@ -19,7 +19,7 @@
   <row>
     <panel>
       <html>
-      <h1>Step 1: Token and Realm for data ingest</h1>
+      <h1>Step 1: Token, Realm and Inputs</h1>
       <p>To set up this TA, it is necessary to retrieve the realm of your Splunk Observability stack (this is found in the URL of the stack)</p>
       <p>eg: https://app.{REALM}.signalfx.com Where REALM is the realm you will need to enter in the Setup Page</p>
       <br/>
@@ -29,6 +29,7 @@
       <p>"show" the token, and enter it into the <a href="/app/observability_admin_TA/configuration">configuration</a> for your account.</p>
       <p>For the <b>Tokens</b> input, a "User API Access Token" with Admin permissions must be used.</p>
       <p>this can be found on your profile page, in the top right corner of the page. You can create a seperate account in <a href="/app/observability_admin_TA/configuration">configuration</a> for using this token</p>
+      <p>Lastly simply add your inputs <a href="/app/observability_admin_TA/inputs">inputs</a></p>
         <p>There is currently 7 types of input (Alerts, Charts, Dashboards, Detectors, Synthetics, Synthetics (detailed) and Tokens)</p>
     </html>
     </panel>
@@ -72,6 +73,7 @@
       <html>
       <h1>Support</h1>
       <p>Feel Free to contact me at: brody.dom.tedesco@gmail.com or on the Splunk usergroup Slack: Brody Tedesco</p>
+      <p><a href="https://github.com/brodytedesco/observability_admin_ta">Github</a></p>
 
  
     </html>
