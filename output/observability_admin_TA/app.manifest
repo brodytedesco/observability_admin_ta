@@ -21,7 +21,7 @@
         "id": {
             "group": null,
             "name": "observability_admin_TA",
-            "version": "1.2.0"
+            "version": "1.2.1"
         },
         "license": {
             "name": "LICENSE.txt",
