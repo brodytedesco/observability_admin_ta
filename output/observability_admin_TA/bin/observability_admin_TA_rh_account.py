@@ -53,14 +53,9 @@ fields = [
         required=True,
         encrypted=True,
         default=None,
-        validator=validator.AllOf(
-            validator.Pattern(
-                regex=r"""^[a-zA-Z]\w*$""", 
-            ), 
-            validator.String(
-                max_len=25, 
-                min_len=20, 
-            )
+        validator=validator.String(
+            max_len=25, 
+            min_len=20, 
         )
     )
 ]

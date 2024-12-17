@@ -66,11 +66,6 @@
                             "label": "Token",
                             "validators": [
                                 {
-                                    "type": "regex",
-                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
-                                    "pattern": "^[a-zA-Z]\\w*$"
-                                },
-                                {
                                     "type": "string",
                                     "errorMsg": "Length of input name should be between 20 and 25",
                                     "minLength": 20,
@@ -261,7 +256,7 @@
     "meta": {
         "name": "observability_admin_TA",
         "restRoot": "observability_admin_TA",
-        "version": "1.2.1",
+        "version": "1.2.2",
         "displayName": "O11y (Splunk Observability) TA",
         "schemaVersion": "0.0.9",
         "supportedThemes": [
