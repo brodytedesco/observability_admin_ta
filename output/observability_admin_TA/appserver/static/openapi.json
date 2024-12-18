@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "observability_admin_TA",
-        "version": "1.2.2",
+        "version": "1.2.0",
         "description": "O11y (Splunk Observability) TA",
         "contact": {
             "name": ""
