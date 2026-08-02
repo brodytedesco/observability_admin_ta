@@ -1,0 +1,296 @@
+<form version="1.1">
+  <label>Observability Platform Health</label>
+  <description>An overview of your 011y platforms engagement, object, limits and data health</description>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+<h1>
+Engagment Health
+</h1>
+</html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>Users</title>
+        <search>
+          <query>|sim flow query="data('sf.org.num.orguser', rollup='max', extrapolation='last_value').max(over='2h').publish()"
+|stats max(_value) as users</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Synthetic Tests</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_synthetic_sourcetype` 
+|stats dc(test.id)</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Detectors</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_detector_sourcetype` 
+|stats dc(id)</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Users Over Time</title>
+        <search>
+          <query>|sim flow query="data('sf.org.num.orguser', rollup='max', extrapolation='last_value').max(over='2h').publish()"
+|timechart max(_value) as users</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Synthetic Tests Over Time</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_synthetic_sourcetype` 
+|timechart dc(test.id) as "Synthetic Tests"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Detectors Over Time</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_detector_sourcetype` 
+|timechart dc(id) as Detectors</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>Dashboards</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_dashboard_sourcetype`
+|stats dc(id)</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Charts</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_chart_sourcetype` 
+|stats dc(id)</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Users Over Time</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_dashboard_sourcetype`
+|timechart dc(id) as Dashboards</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Detectors Over Time</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_chart_sourcetype` 
+|timechart dc(id) as Charts</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+<h1>Content Health</h1>
+</html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Synthetics Always Failing</title>
+        <search>
+          <query>|sim flow query="data('synthetics.run.uptime.percent', rollup='max').max(by=['test']).publish()"
+|stats max(_value) as value by test
+|where value==0
+|rename test as "Test Name"
+|table "Test Name"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>Detectors over MTS limit</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_detector_sourcetype`
+
+|stats latest(overMTSLimit) as overMTSLimit by name
+|where overMTSLimit !="false"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Detectors with non-matching expected rule labels</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_detector_sourcetype`
+|stats latest(rules{}.detectLabel) as ruleLabels latest(programText) as programText by name
+|eval ruleLabels = mvmap(ruleLabels,replace(ruleLabels,"\(","\("))
+|eval ruleLabels = mvmap(ruleLabels,replace(ruleLabels,"\)","\)"))
+
+|eval detectLabelHasCondition = mvmap(ruleLabels,if(match(programText, ruleLabels), "true","false"))
+|table ruleLabels programText detectLabelHasCondition name
+|search detectLabelHasCondition=false</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+<h1>
+Limit and Data Health
+</h1>
+</html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Custom Metric Count (and Limit)</title>
+        <search>
+          <query>| sim flow query="data('sf.org.numCustomMetrics').publish()"
+| append
+[| sim flow query="data('sf.org.limit.customMetricMaxLimit', rollup='max').publish()"
+]
+| eval "Metric Name" = if(match(metric_name,"limit"),"Limit","Active")
+| timechart max(_value) as value by "Metric Name"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Active MTS (and Limit)</title>
+        <search>
+          <query>| sim flow query="data('sf.org.limit.activeTimeSeries').publish()"
+| append
+[| sim flow query="data('sf.org.numInactiveTimeSeries').publish()"
+]
+| eval "Metric Name" = if(match(metric_name,"limit"),"Limit","Active")
+| timechart avg(_value) as value by "Metric Name"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Number of Data Points Dropped</title>
+        <search>
+          <query>|sim flow query=data('sf.org.numDatapointsDroppedThrottle').publish()
+|append [
+|sim flow query="data('sf.org.numDatapointsDroppedExceededQuota').publish()"]
+|eval "Metric Name" = if(match(metric_name,"numDatapointsDroppedThrottle"),"Throttled","Exceeded Quota")
+|timechart avg(_value) as value by "Metric Name"</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</form>

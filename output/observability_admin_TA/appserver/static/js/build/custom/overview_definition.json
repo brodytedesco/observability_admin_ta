@@ -1,0 +1,233 @@
+{
+  "visualizations": {
+    "main_page_label_viz": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "# Monitoring dashboard",
+        "fontSize": "large"
+      }
+    },
+    "main_page_description_viz": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "Use the Monitoring dashboard to track behaviors for your add-on.",
+        "customFontSize": 12
+      }
+    },
+    "overview_main_label_viz": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "## Overview",
+        "fontSize": "large"
+      }
+    },
+    "overview_timerange_label_start_viz": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorFontSize": 12,
+        "backgroundColor": "transparent",
+        "majorColor": "#9fa4af"
+      },
+      "dataSources": {
+        "primary": "overview_data_time_label_start_ds"
+      }
+    },
+    "overview_timerange_label_end_viz": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorFontSize": 12,
+        "backgroundColor": "transparent",
+        "majorColor": "#9fa4af"
+      },
+      "context": {},
+      "dataSources": {
+        "primary": "overview_data_time_label_end_ds"
+      }
+    },
+    "overview_data_volume_viz": {
+      "type": "splunk.column",
+      "options": {
+        "xAxisVisibility": "hide",
+        "seriesColors": [
+          "#A870EF",
+          "#029ceb"
+        ],
+        "yAxisTitleText": "Volume (bytes)",
+        "overlayFields": "Number of events",
+        "y2AxisTitleText": "Number of events",
+        "xAxisTitleText": "Time",
+        "y2AxisLineVisibility": "show",
+        "showRoundedY2AxisLabels": true,
+        "showOverlayY2Axis": true
+      },
+      "title": "Data ingestion",
+      "dataSources": {
+        "primary": "overview_data_volume_ds_chain"
+      }
+    },
+    "overview_errors_viz": {
+      "type": "splunk.line",
+      "options": {
+        "xAxisVisibility": "hide",
+        "xAxisTitleText": "Time",
+        "yAxisTitleText": "Error count"
+      },
+      "title": "Errors",
+      "dataSources": {
+        "primary": "overview_errors_count_ds_chain"
+      }
+    }
+  },
+  "dataSources": {
+    "overview_data_time_label_start_ds": {
+      "type": "ds.search",
+      "options": {
+        "query": "| makeresults | addinfo | eval StartDate = strftime(info_min_time, \"%e %b %Y %I:%M%p\") | table StartDate",
+        "queryParameters": {
+          "earliest": "$overview_time.earliest$",
+          "latest": "$overview_time.latest$"
+        }
+      }
+    },
+    "overview_data_time_label_end_ds": {
+      "type": "ds.search",
+      "options": {
+        "query": "| makeresults | addinfo | eval EndDate = strftime(info_max_time, \"%e %b %Y %I:%M%p\") | table EndDate",
+        "queryParameters": {
+          "earliest": "$overview_time.earliest$",
+          "latest": "$overview_time.latest$"
+        }
+      }
+    },
+    "overview_data_volume_ds": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=_internal source=*license_usage.log type=Usage (s IN (observability_object*,observability_audit_event*)) | timechart sum(b) as Usage | rename Usage as \"Data volume\" | join _time [search index=_internal source=*observability_admin_ta* action=events_ingested | timechart sum(n_events) as \"Number of events\" ]",
+        "queryParameters": {
+          "earliest": "$overview_time.earliest$",
+          "latest": "$overview_time.latest$"
+        },
+        "enableSmartSources": true
+      },
+      "name": "data_volume"
+    },
+    "overview_data_volume_ds_chain": {
+      "type": "ds.chain",
+      "options": {
+        "extend": "overview_data_volume_ds",
+        "query": "| append [ gentimes increment=5m [ makeresults | eval start=strftime( if(\"$overview_time.earliest$\"=\"now\",now(),if(match(\"$overview_time.earliest$\",\"^\\d+-\\d+-\\d+(T?\\d+:\\d+:\\d+(\\.\\d{3}Z)?)$\"),strptime(\"$overview_time.earliest$\", \"%Y-%m-%dT%H:%M:%S.%N\"),relative_time(now(), \"$overview_time.earliest$\"))), \"%m/%d/%Y:%T\")| eval end=strftime(if(\"$overview_time.latest$\"=\"now\",now(),if(match(\"$overview_time.latest$\",\"^\\d+-\\d+-\\d+(T?\\d+:\\d+:\\d+(\\.\\d{3}Z)?)$\"),strptime(\"$overview_time.latest$\", \"%Y-%m-%dT%H:%M:%S.%N\") ,relative_time(now(), \"$overview_time.latest$\"))), \"%m/%d/%Y:%T\")| return start end] | eval Number of events = 0 | fields - endhuman starthuman starttime | rename endtime as _time | head ($data_volume:job.resultCount$==0)]",
+        "queryParameters": {
+          "earliest": "$overview_time.earliest$",
+          "latest": "$overview_time.latest$"
+        }
+      }
+    },
+    "overview_errors_count_ds": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=_internal source=*observability_admin_ta* log_level IN (ERROR) | timechart count as Errors by exc_l ",
+        "queryParameters": {
+          "earliest": "$overview_time.earliest$",
+          "latest": "$overview_time.latest$"
+        },
+        "enableSmartSources": true
+      },
+      "name": "error_count"
+    },
+    "overview_errors_count_ds_chain": {
+      "type": "ds.chain",
+      "options": {
+        "extend": "overview_errors_count_ds",
+        "query": "| append [ gentimes increment=5m [ makeresults | eval start=strftime( if(\"$overview_time.earliest$\"=\"now\",now(),if(match(\"$overview_time.earliest$\",\"^\\d+-\\d+-\\d+(T?\\d+:\\d+:\\d+(\\.\\d{3}Z)?)$\"),strptime(\"$overview_time.earliest$\", \"%Y-%m-%dT%H:%M:%S.%N\"),relative_time(now(), \"$overview_time.earliest$\"))), \"%m/%d/%Y:%T\")| eval end=strftime(if(\"$overview_time.latest$\"=\"now\",now(),if(match(\"$overview_time.latest$\",\"^\\d+-\\d+-\\d+(T?\\d+:\\d+:\\d+(\\.\\d{3}Z)?)$\"),strptime(\"$overview_time.latest$\", \"%Y-%m-%dT%H:%M:%S.%N\") ,relative_time(now(), \"$overview_time.latest$\"))), \"%m/%d/%Y:%T\")| return start end] | eval Errors = 0 | fields - endhuman starthuman starttime | rename endtime as _time | head ($error_count:job.resultCount$==0)]",
+        "queryParameters": {
+          "earliest": "$overview_time.earliest$",
+          "latest": "$overview_time.latest$"
+        }
+      }
+    }
+  },
+  "defaults": {},
+  "inputs": {
+    "overview_input": {
+      "options": {
+        "defaultValue": "-24h,now",
+        "token": "overview_time"
+      },
+      "title": "Time",
+      "type": "input.timerange"
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "globalInputs": [
+      "overview_input"
+    ],
+    "structure": [
+      {
+        "item": "main_page_label_viz",
+        "position": {
+          "x": 20,
+          "y": 20,
+          "w": 500,
+          "h": 200
+        }
+      },
+      {
+        "item": "main_page_description_viz",
+        "position": {
+          "x": 20,
+          "y": 50,
+          "w": 500,
+          "h": 200
+        }
+      },
+      {
+        "item": "overview_main_label_viz",
+        "position": {
+          "x": 20,
+          "y": 100,
+          "w": 500,
+          "h": 200
+        }
+      },
+      {
+        "item": "overview_timerange_label_start_viz",
+        "position": {
+          "x": 20,
+          "y": 130,
+          "w": 100,
+          "h": 20
+        }
+      },
+      {
+        "item": "overview_timerange_label_end_viz",
+        "position": {
+          "x": 120,
+          "y": 130,
+          "w": 100,
+          "h": 20
+        }
+      },
+      {
+        "item": "overview_data_volume_viz",
+        "position": {
+          "x": 20,
+          "y": 150,
+          "w": 620,
+          "h": 300
+        }
+      },
+      {
+        "item": "overview_errors_viz",
+        "position": {
+          "x": 640,
+          "y": 150,
+          "w": 620,
+          "h": 300
+        }
+      }
+    ]
+  },
+  "description": "",
+  "title": "Custom Components Dashboard"
+}

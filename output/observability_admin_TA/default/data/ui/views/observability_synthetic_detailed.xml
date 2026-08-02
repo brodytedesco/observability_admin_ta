@@ -1,0 +1,43 @@
+<form version="1.1" theme="dark">
+  <label>Synthetic Detailed</label>
+  <description>A dashboard to list all details of a synthetic retrieved via the API: https://dev.splunk.com/observability/reference/api/synthetics/latest#endpoint-retrieve-synthetics-query</description>
+  <init>
+    <unset token="hide"></unset>
+    <set token="show_table"></set>
+    <set token="json">init</set>
+    <set token="json_pretty">init</set>
+    <set token="id">init</set>
+    <set token="type">init</set>
+  </init>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="dropdown" token="syntheticName" searchWhenChanged="true">
+      <label>Synthetic Name</label>
+      <default>Enter Synthetic Name</default>
+      <initialValue>Enter Synthetic Name</initialValue>
+      <fieldForLabel>name</fieldForLabel>
+      <fieldForValue>name</fieldForValue>
+      <search>
+        <query>`observability_admin_index` `observability_admin_synthetic_sourcetype`   |stats latest(id) as id by name</query>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Synthetic Details: $syntheticName$</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_synthetic_sourcetype` name=$syntheticName|s$
+|fields - host, index, linecount, punct, source, sourcetype, splunk_server, timestamp
+|stats latest(*) as * by name
+|transpose column_name="fields"
+|rename "row 1" as values
+|sort +fields</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">15</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>

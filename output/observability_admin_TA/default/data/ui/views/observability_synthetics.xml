@@ -1,0 +1,22 @@
+<dashboard version="1.1" theme="light">
+  <label>Synthetics</label>
+  <description>A comprehensive list of synthetic tests in your observability environment, Click on any of the detectors to drilldown into further details. retrieved via the observability API: https://dev.splunk.com/observability/reference/api/detectors/latest#endpoint-retrieve-detectors-query</description>
+  <row>
+    <panel>
+      <table>
+        <title>Synthetics</title>
+        <search>
+          <query>`observability_admin_index` `observability_admin_synthetic_sourcetype`   |stats latest(test.type) as type by test.name |rename test.name as name</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <link target="_blank">/app/observability_admin_TA/observability_synthetic_detailed?form.syntheticName=$click.value$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</dashboard>

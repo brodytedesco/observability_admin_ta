@@ -1,0 +1,9 @@
+splunktaucclib
+splunk-sdk
+solnlib
+# requests 2.34+ requires Python >=3.10 (PEP 604 annotations) and fails to
+# import on Splunk's bundled Python 3.9. splunktaucclib dropped the requests
+# dep on newer lines and our helpers `import requests` directly, so list it
+# explicitly and keep it on a 3.9-compatible line.
+requests>=2.32,<2.34
+urllib3<2
