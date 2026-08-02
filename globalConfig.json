@@ -182,6 +182,90 @@
                     ],
                     "inputHelperModule": "observability_object_helper",
                     "title": "observability_object"
+                },
+                {
+                    "name": "observability_audit_event",
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the data input.",
+                            "required": true
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Account to use",
+                            "options": {
+                                "referenceName": "account"
+                            },
+                            "field": "account",
+                            "help": "The Observability account (realm/token) to authenticate against the Audit Events API.",
+                            "required": true
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Event Category",
+                            "field": "sf_event_category",
+                            "options": {
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "AUDIT",
+                                        "label": "AUDIT"
+                                    },
+                                    {
+                                        "value": "CUSTOMER_AUDIT",
+                                        "label": "CUSTOMER_AUDIT"
+                                    }
+                                ]
+                            },
+                            "help": "The audit event category to retrieve (maps to the API's sf_eventCategory parameter).",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Event Type",
+                            "field": "sf_event_type",
+                            "help": "Optional event type filter (maps to the API's sf_eventType). Example values: AUDIT -> HttpRequest, SessionLog, DetectorLog; CUSTOMER_AUDIT -> DASHBOARD, DETECTOR, DASHBOARD_GROUP, ORG_MEMBER, INTEGRATION, SLO. Leave blank to retrieve all event types for the selected category.",
+                            "required": false
+                        },
+                        {
+                            "type": "interval",
+                            "label": "Interval",
+                            "defaultValue": "300",
+                            "field": "interval",
+                            "options": {
+                                "range": [
+                                    10,
+                                    86400
+                                ]
+                            },
+                            "help": "Time interval of the data input, in seconds.",
+                            "required": true
+                        },
+                        {
+                            "type": "index",
+                            "field": "index",
+                            "defaultValue": "observability_admin",
+                            "label": "Index"
+                        }
+                    ],
+                    "inputHelperModule": "observability_audit_event_helper",
+                    "title": "observability_audit_event",
+                    "subDescription": "Checkpointed incremental collection from the /v2/audit/events API. On first run (no checkpoint) a 7-day backfill window is used. The API caps queryable results at 10,000 (offset+limit) per request, so windows containing more than 10,000 events will be retried in subsequent polls rather than silently skipped."
                 }
             ],
             "title": "Inputs",
@@ -209,8 +293,12 @@
                         "field": "index"
                     },
                     {
-                        "label": "Object Type",
-                        "field": "object_type"
+                        "label": "Event Category",
+                        "field": "sf_event_category"
+                    },
+                    {
+                        "label": "Event Type",
+                        "field": "sf_event_type"
                     },
                     {
                         "label": "Status",
@@ -231,8 +319,12 @@
                         "field": "index"
                     },
                     {
-                        "label": "Object Type",
-                        "field": "object_type"
+                        "label": "Event Category",
+                        "field": "sf_event_category"
+                    },
+                    {
+                        "label": "Event Type",
+                        "field": "sf_event_type"
                     },
                     {
                         "label": "Status",
@@ -256,13 +348,12 @@
     "meta": {
         "name": "observability_admin_TA",
         "restRoot": "observability_admin_TA",
-        "version": "1.2.2",
+        "version": "1.2.4",
         "displayName": "O11y (Splunk Observability) TA",
-        "schemaVersion": "0.0.9",
+        "schemaVersion": "0.0.10",
         "supportedThemes": [
             "light",
             "dark"
-        ],
-        "_uccVersion": "5.54.0"
+        ]
     }
 }

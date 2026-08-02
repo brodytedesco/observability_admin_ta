@@ -1,0 +1,39 @@
+name: Build and Publish
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract Tag Name
+        id: extract_tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v7
+      
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.9'
+      
+      - name: Install UCC
+        run: pip install splunk-add-on-ucc-framework
+      
+      - name: Build add-on
+        run: ucc-gen build --source package --ta-version ${{ env.TAG_NAME }}
+      
+      - name: Package add-on
+        run: ucc-gen package --path output/observability_admin_TA
+      
+      - name: Upload to GitHub Releases
+        uses: softprops/action-gh-release@v3
+        with:
+          files: observability_admin_TA-${{ env.TAG_NAME }}.tar.gz
